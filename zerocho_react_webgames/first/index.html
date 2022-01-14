@@ -2,10 +2,11 @@
   <head>
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
   <body>
     <div id="root"></div>
-    <script>
+    <script type="text/babel">
       const e = React.createElement;
 
       class LikeButton extends React.Component {
@@ -19,15 +20,20 @@
         render(){
           //   화면이 보여지는 부분.
           // createElement 인자는 Elements, event function, elements contents
-          return e('button', 
-                    { onClick : () => {this.setState({'liked' : true})}, type: 'submit' }, // 에로우 함수 내용은 클릭 시 liked 상태 값을 true로 변경한다.
-                    this.state.liked === true ? 'Liked' : 'Like'
-                  ); // <button>Like</button>이라는 Elements를 만들겠다. 라는 의미.
+          return <button type="submit" onClick={()=> {this.setState({liked:true})}}>
+                   {this.state.liked === true ? 'Liked' : 'Like'}
+                 </button> // 아래 코드를 이렇게 변경 가능하다. -> 위 html elements와 유사한 것을 react에서 jsx(JS + XML)라고 하며 jsx를 적용하기 위해서는 babel(line 5)이 필요하다.
+
+                  // e('button', 
+                  //   { onClick : () => {this.setState({'liked' : true})}, type: 'submit' }, // 에로우 함수 내용은 클릭 시 liked 상태 값을 true로 변경한다.
+                  //   this.state.liked === true ? 'Liked' : 'Like'
+                  // ); // <button>Like</button>이라는 Elements를 만들겠다. 라는 의미.
         }
       }
     </script>
-    <script>
-      ReactDOM.render(e(LikeButton), document.querySelector('#root')); // 위 id 값이 root인 div elements에 react에서 만들겠다는 LikeButton 컴포넌트를 그리겠다. 라는 의미.
+    <script type="text/babel">
+      ReactDOM.render(<LikeButton />, document.querySelector('#root'));
+      // ReactDOM.render(e(LikeButton), document.querySelector('#root')); // 위 id 값이 root인 div elements에 react에서 만들겠다는 LikeButton 컴포넌트를 그리겠다. 라는 의미.
     </script>
   </body>
 </html>
