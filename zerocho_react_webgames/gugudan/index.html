@@ -10,6 +10,7 @@
     <div id="root"></div>
     <script type="text/babel">
       class GuGuDan extends React.Component {
+          // 하나의 컴포넌트를 여러번 호출할 시(ReactDOM) 호출 된 여러개의 컴포넌트(하나의 컴포넌트)들의 state는 다 다르다.
           constructor(props) {
             super(props);
             this.state = {
@@ -29,7 +30,7 @@
             e.preventDefault();
             if(parseInt(this.state.input_value) === this.state.first * this.state.second){
               this.setState({
-                result_value : "정답",
+                result_value : this.state.first + " x " + this.state.second + " = " + parseInt(this.state.input_value) + " 정답!",
                 first : Math.ceil(Math.random() * 9),
                 second : Math.ceil(Math.random() * 9),
                 input_value : '',
