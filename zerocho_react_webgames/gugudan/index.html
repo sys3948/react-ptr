@@ -32,19 +32,34 @@
           onSubmit = (e) => {
             e.preventDefault();
             if(parseInt(this.state.input_value) === this.state.first * this.state.second){
-              this.setState({
-                result_value : this.state.first + " x " + this.state.second + " = " + parseInt(this.state.input_value) + " 정답!",
-                first : Math.ceil(Math.random() * 9),
-                second : Math.ceil(Math.random() * 9),
-                input_value : '',
+              // 이전과 같이 그냥 setState()로 state를 변경할 경우 과거의 state와 미래의 state를 구분하기 힘들 경우가 있다.
+              // 그 경우를 해결하기 위한 방법으로 아래와 같이 setState를 function화를 하면된다.
+              // function화된 setState에서의 인자는 과거의 state가 된다.
+              this.setState((prevState) => {
+                return {
+                  result_value : prevState.first + " x " + prevState.second + " = " + parseInt(prevState.input_value) + " 정답!",
+                  first : Math.ceil(Math.random() * 9),
+                  second : Math.ceil(Math.random() * 9),
+                  input_value : '',
+                }
               });
+
+              this.input.focus();
             }else {
               this.setState({
                 result_value : "땡",
                 input_value : '',
               });
+              this.input.focus();
             }
           }
+
+          onFouce = (c) => {this.input = c};
+
+          // input element에 fouce를 맞추고 싶을 때
+          // line 47, 53, 62, 70으로 하면 된다. 
+
+          input;
 
           render(){
               // Component 내에서의 {}의 이미는 {}안에서는 JS를 사용할 수 있다는 의미다.
@@ -52,7 +67,7 @@
                 <>
                   <div>{this.state.first} 곱하기 {this.state.second}는?</div>
                   <form onSubmit={this.onSubmit}>
-                    <input type="number" value = {this.state.input_value} onChange={this.onChange} />
+                    <input ref={this.onFouce} type="number" value = {this.state.input_value} onChange={this.onChange} />
                     <button type="submit">입력!</button>
                   </form>
                   <div>{this.state.result_value}</div>
