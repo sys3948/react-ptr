@@ -22,6 +22,9 @@
             };
           }
 
+          // render() 외부에서 function을 정의할 시 function 정의는 arrow function으로 정의해야한다.
+          // 이유는 arrow function이 아닌 일반 function으로 정의할 경우 this의 참조가 달라진다.
+
           onChange = (e) => {
             this.setState({input_value : e.target.value});
           }
@@ -46,15 +49,29 @@
           render(){
               // Component 내에서의 {}의 이미는 {}안에서는 JS를 사용할 수 있다는 의미다.
               return (
-                <div>
+                <>
                   <div>{this.state.first} 곱하기 {this.state.second}는?</div>
                   <form onSubmit={this.onSubmit}>
                     <input type="number" value = {this.state.input_value} onChange={this.onChange} />
-                    <button>입력!</button>
+                    <button type="submit">입력!</button>
                   </form>
                   <div>{this.state.result_value}</div>
-                </div>
+                </>
               );
+
+              // 과거 React에서는 아래 line 62, 69와 같이 return할 시 어떠한 값도 없는 div elements의 contents로 해야됬다.
+              // 현재는 과거와 달리 React.Fragment(<></>)로 아래의 방법을 개선했다. React.Fragment로 할 경우 html render시 아래와 같이 빈 div elements contents로 표현되지 않는다.
+
+            //   return (
+            //     <div>
+            //       <div>{this.state.first} 곱하기 {this.state.second}는?</div>
+            //       <form onSubmit={this.onSubmit}>
+            //         <input type="number" value = {this.state.input_value} onChange={this.onChange} />
+            //         <button>입력!</button>
+            //       </form>
+            //       <div>{this.state.result_value}</div>
+            //     </div>
+            //   );
           }
       }
     </script>
