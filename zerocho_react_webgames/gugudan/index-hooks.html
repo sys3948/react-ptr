@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> <!-- babel load script -->
+
+    <meta charset="utf*8" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // 과거 React에서의 함수형 컴포넌트느 setState를 사용할 수 없는 컴포넌트였지만
+      // 현재 함수형 컴포넌트에서도 setState를 사용할 수 있다.
+      // 이것이 Hooks다.
+
+      
+      const GuGuDan = () => {
+          //   first : Math.ceil(Math.random() * 9),
+          //   second : Math.ceil(Math.random() * 9),
+          //   input_value : '',
+          //   result_value : '',
+          // 위 state는 hooks에서는 아래로 표현된다.
+          const [first, setFist] = React.useState(Math.ceil(Math.random() * 9));
+          const [second, setSecond] = React.useState(Math.ceil(Math.random() * 9));
+          const [input_value, setInput_value] = React.useState('');
+          const [result_value, setResult_value] = React.useState('');
+          const inputRef = React.useRef(null);
+
+          const onChange = (e) => {
+            setInput_value(e.target.value);
+          }
+
+          const onSubmit = (e) => {
+            e.preventDefault();
+            if(parseInt(input_value) === first * second){
+              //   this.setState((prevState) => {
+              //     return {
+              //       result_value : prevState.first + " x " + prevState.second + " = " + parseInt(prevState.input_value) + " 정답!",
+              //       first : Math.ceil(Math.random() * 9),
+              //       second : Math.ceil(Math.random() * 9),
+              //       input_value : '',
+              //     }
+              //   });
+
+              // 위 class 컴포넌트의 setState는 hooks에서는 아래와 같이 setState를 한다.
+
+              setResult_value(first + " x " + second + " = " + parseInt(input_value) + " 정답!");
+              setFist(Math.ceil(Math.random() * 9));
+              setSecond(Math.ceil(Math.random() * 9));
+              setInput_value('');
+
+              inputRef.current.focus();
+            }else {
+              //   this.setState({
+              //     result_value : "땡",
+              //     input_value : '',
+              //   });
+              setResult_value('땡');
+              setInput_value('');
+              inputRef.current.focus();
+            }
+          }
+
+          // input element에 fouce를 맞추고 싶을 때
+          // line 27, 52, 60, 71으로 하면 된다. 
+
+          return (
+            <>
+              <div>{first} 곱하기 {second}는?</div>
+              <form onSubmit={onSubmit}>
+                <input ref={inputRef} type="number" id="input-element" className="input-element-class-attribute" value = {input_value} onChange={onChange} />
+                <button type="submit">입력!</button>
+              </form>
+              <div>{result_value}</div>
+            </>
+          )
+      }
+    </script>
+    <script type="text/babel">
+      ReactDOM.render(<GuGuDan />, document.querySelector('#root'));
+    </script>
+  </body>
+</html>
