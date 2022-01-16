@@ -2,13 +2,54 @@ const React = require('react'); // npm에서 react를 불러와야지 하나의 
 const {Component} = React;
 
 class WordRelay extends Component{
-    state = {
-        text : 'Hello, webpack',
-    };
+  state = {
+    word : '윤',
+    value : '',
+    result : '',
+  };
 
-    render(){
-        return <h1>{this.state.text}</h1>
-    };
+  onChange = (e) => {
+    this.setState({
+        value : e.target.value,
+    });
+  }
+
+  InputRef = (c) => {
+    this.input = c;
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    if(this.state.word[this.state.word.length - 1] === this.state.value[0]){
+      this.setState({
+        result : '정답!',
+        word : this.state.value,
+        value : ''
+      });
+      this.input.focus();
+    } else {
+      this.setState({
+        result : '땡!',
+        value : ''
+      });
+      this.input.focus();
+    }
+  }
+
+  input;
+
+  render(){
+    return (
+      <>
+        <div>{this.state.word}</div>
+        <form onSubmit={this.onSubmit}>
+          <input ref={this.InputRef} value={this.state.value} onChange={this.onChange} />
+          <input type="submit" value="입력" / >
+        </form>
+        <div>{this.state.result}</div>
+      </>  
+    )
+  };
 }
 
 module.exports = WordRelay; // node의 module system으로 외부에서 WordRelay 컴포넌트를 load하기 위해서 작성해줘야한다.
