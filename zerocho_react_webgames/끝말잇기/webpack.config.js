@@ -1,6 +1,7 @@
 // 이 webpack.config에서 webpack이 돌아간다. 
 
 const path = require('path');
+const RefreshWebpack = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = {
   name : 'wordrelay-setting', // 개발자가 맘대로 지정한다.
@@ -20,25 +21,24 @@ module.exports = {
       loader : 'babel-loader',
       options : {
         presets : ['@babel/preset-env', '@babel/preset-react'],
+        plugins : ['react-refresh/babel'],
       },
     }],
   },
 
-//   module: {
-//     rules: [{
-//       test: /\.jsx?$/,
-//       loader: 'babel-loader',
-//       options: {
-//         presets: [
-//           '@babel/preset-env',
-//           '@babel/preset-react',
-//         ],
-//       },
-//     }],
-//   },
+  plugins : [
+    new RefreshWebpack()
+  ],
 
   output : { // 출력
     path : path.join(__dirname, 'result'), // path는 현재 폴더에서 result 폴더를 의미한다.
     filename : 'app.js',
+    publicPath : '/result/',
+  },
+
+  devServer : {
+    devMiddleware : {publicPath : '/result/'},
+    static : {directory : path.resolve(__dirname)},
+    hot : true,
   },
 }
