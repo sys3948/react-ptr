@@ -1,5 +1,5 @@
 const React = require('react');
 const ReactDom = require('react-dom');
-import NumberBaseBall from './NumberBaseBall';
+import NumberBaseBall from './NumberBaseBallHooks';
 
 ReactDom.render(<NumberBaseBall />, document.getElementById('root'));

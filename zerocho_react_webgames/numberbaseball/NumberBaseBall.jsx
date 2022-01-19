@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Try from './Try';
 
-function getNumbers(){ //
+function getNumbers(){ // this를 사용하지 않는 함수일 경우 컴포넌트 밖으로 뺄 수 있다.
   const caniddate = [1, 2, 3, 4, 5, 6,7, 8, 9];
   const array = [];
   for(let i = 0; i < 4; i++){
@@ -81,6 +81,7 @@ class NumberBaseball extends Component{
         <div>시도 : {this.state.tries.length}</div>
         <ul>
           {this.state.tries.map((v, i) => {
+            /*아래는 React에서의 props로 부모 state를 자식에게 넘겨줄 수 있는 속성이다.*/
             return(<Try key={`${i + 1}차 시도 :`} tryInfo = {v} />)
           })}
         </ul>
