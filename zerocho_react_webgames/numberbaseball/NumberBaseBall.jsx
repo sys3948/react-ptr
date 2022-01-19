@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
+import React, {Component, createRef} from 'react'; // createRef는 hooks에서 ref를 사용하는 방법과 유사한 형태로 구현하는 object다.
 import Try from './Try';
+import {PureComponent} from 'react'; // shouldComponentUpdate를  자동으로 return True할지 return False할지 정해주는 Component다.
 
 function getNumbers(){ // this를 사용하지 않는 함수일 경우 컴포넌트 밖으로 뺄 수 있다.
   const caniddate = [1, 2, 3, 4, 5, 6,7, 8, 9];
@@ -19,6 +20,10 @@ class NumberBaseball extends Component{
     tries : [],
   }
 
+  shouldComponentUpdate(nextProps, nextState, nextContext){
+    // 리엑트에서 지원하는 method로 렌더링할 경우를 지정해주는 method다.
+  }
+
 
   onSubmitForm = (e) => {
     e.preventDefault();
@@ -28,11 +33,11 @@ class NumberBaseball extends Component{
         tries : [...this.state.tries, {try : this.state.value, result : '홈런!'}],
       });
       alert('게임을 다시 시작합니다!');
-        this.setState({
-          value : '',
-          answer : getNumbers(),
-          tries : [],
-        });
+      this.setState({
+        value : '',
+        answer : getNumbers(),
+        tries : [],
+      });
     }else{
       const answerArray = this.state.value.split('').map((v) => parseInt(v));
       let strike = 0;
@@ -61,6 +66,7 @@ class NumberBaseball extends Component{
         })
       }
     }
+    this.inputRef.current.focus();
   }
 
   onChangeInput = (e) => {
@@ -70,13 +76,15 @@ class NumberBaseball extends Component{
     });
   };
 
+  inputRef = createRef();
+
 
   render(){
     return (
       <>
         <h1>{this.state.result}</h1>
         <form onSubmit={this.onSubmitForm}>
-          <input type="test" maxLength={4} value={this.state.value} onChange={this.onChangeInput} />
+          <input ref={this.inputRef} type="test" maxLength={4} value={this.state.value} onChange={this.onChangeInput} />
         </form>
         <div>시도 : {this.state.tries.length}</div>
         <ul>

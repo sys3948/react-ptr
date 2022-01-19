@@ -32,7 +32,7 @@ const NumberBaseBall = () => {
       let strike = 0;
       let ball = 0;
       if (tries.length >= 9){
-        setResult(`10번 넘게 틀려서 실패! 답은 ${answer.jsoin(',')}였습니다.`);
+        setResult(`10번 넘게 틀려서 실패! 답은 ${answer.join(',')}였습니다.`);
         alert('게임을 다시 시작합니다!');
         setValue('');
         setAnswer(getNumbers());
@@ -45,6 +45,7 @@ const NumberBaseBall = () => {
             ball++;
           }
         }
+        setValue('');
         setTries([...tries, { try : value, result : `${strike} 스크라이크, ${ball} 볼`}]);
       }
     }
