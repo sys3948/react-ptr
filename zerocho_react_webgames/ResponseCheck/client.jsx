@@ -1,3 +1,5 @@
-import { ReactDOM } from "react";
+import React from 'react';
+import ReactDOM  from "react-dom";
+import ResponseCheck from './ResponseCheck';
 
-ReactDOM.render(, document.getElementById('root'));
+ReactDOM.render(<ResponseCheck />, document.getElementById('root'));

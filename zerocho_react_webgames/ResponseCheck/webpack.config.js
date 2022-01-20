@@ -5,7 +5,7 @@ const RefreshWebpack = require('@pmmmwh/react-refresh-webpack-plugin');
 module.exports = {
     name : 'ResponseCheck',
     mode : 'development',
-    devtool : 'evel',
+    devtool : 'eval',
     resolve : {
         extensions : ['.js', '.jsx'],
     },
