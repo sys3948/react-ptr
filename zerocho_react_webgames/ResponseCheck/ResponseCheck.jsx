@@ -34,12 +34,20 @@ class ResponseCheck extends Component {
             });
         } else if(state === 'now'){
             this.endTime = new Date();
-            this.setState({
+            this.setState((prevState) => {
+                return{
                 state : 'waiting',
-                result : [...result, this.endTime - this.startTime],
-                message : '클릭해서 시작하세요.',
+                result : [...prevState.result, this.endTime - this.startTime],
+                message : '클릭해서 시작하세요.',}
             });
         }
+    }
+
+    resultScreen = () => {
+        return (
+            this.state.result.length === 0 ? 
+            null : <div>평균 시간 : {this.state.result.reduce((a, c) => a + c) / this.state.result.length}ms</div>
+        );
     }
 
     render(){
@@ -49,7 +57,7 @@ class ResponseCheck extends Component {
                   {this.state.message}
               </div>
               {/* React에서의 조건문은 아래와 같이 삼항 연산자 또는 부호 연산자를 사용한다. */}
-              {this.state.result.length === 0 ? null : <div>평균 시간 : {this.state.result.reduce((a, c) => a + c) / this.state.result.length}ms</div>}
+              {this.resultScreen()}
             </>
         );
     }
