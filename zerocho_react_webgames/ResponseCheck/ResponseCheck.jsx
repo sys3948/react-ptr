@@ -83,7 +83,7 @@ const ResponseCheckHooks = () => {
     // Class Component일 때의 Ref는 DOM의 접근할 때 사용한 것이다.
     // Hooks에서의 Ref는 Class의 this의 기능도 가지고 있다.
     // 또한 Hooks의 Ref(useRef)는 Hooks에서 State를 변경하면 Hooks 전체가 다시 렌더링이 되는데
-    // Ref부분만 렌더링이 되지 않고 변하는 값만 기록해둔다.
+    // Ref부분만 렌더링이 되지 않고 변하는 값만 기록해둔다. 화면에 변환을 주지 않는다.
     // Ref를 사용할 경우 current로 접근해야한다는 것을 잊지 말아야한다.
     const timeout = useRef(null);
     const startTime = useRef();
