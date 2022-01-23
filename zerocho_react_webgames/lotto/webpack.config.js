@@ -23,25 +23,25 @@ module.exports = {
           '@babel/preset-env', '@babel/preset-react',
         ],
         plugins : [
-          'react-refresh-babel',
+          'react-refresh/babel',
         ],
       },
     }],
+  },
+  
+  plugins : [
+    new RefreshWebpack(),
+  ],
 
-    plugins : [
-      new RefreshWebpack(),
-    ],
+  output : {
+    path : path.join(__dirname, 'result'),
+    filename : 'app.js',
+    publicPath : '/result/',
+  },
 
-    output : {
-      path : path.join(__dirname, 'reasult'),
-      filename : 'app.js',
-      publicPath : '/result/',
-    },
-
-    devServer : {
-      devMiddleware : {publicPath : '/result/'},
-      static : {diretory : path.resolve(__dirname)},
-      hot :true,
-    },
+  devServer : {
+    devMiddleware : {publicPath : '/result/'},
+    static : {directory : path.resolve(__dirname)},
+    hot :true,
   },
 }

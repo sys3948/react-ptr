@@ -181,7 +181,7 @@ const RSPHooks = () => {
       });
     }
     setTimeout(() => {
-      interval = setInterval(this.changeHand, 1000);
+      interval.current = setInterval(changeHand, 1000);
     }, 2000)
   }
 
