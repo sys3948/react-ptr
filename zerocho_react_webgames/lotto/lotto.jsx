@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useRef, useEffect} from 'react';
 import Ball from './ball';
 
 function getWinNumbers() {
@@ -82,4 +82,58 @@ class Lotto extends Component{
 }
 
 
-export default Lotto;
+const LottoHooks = () => {
+  const [windNumbers, setWindNumbers] = useState(getWinNumbers());
+  const [winBalls, setWinBalls] = useState([]);
+  const [bouns, setBouns] = useState(null);
+  const [redo, setRedo] = useState(false);
+  const timeouts = useRef([]);
+
+  const runTimeouts = () => {
+    for(let i = 0; i < windNumbers.length - 1; i++){
+      timeouts.current[i] = setTimeout(() => {
+        setWinBalls((prevWinBalls) => {
+          return(
+            [...prevWinBalls, windNumbers[i]]
+          );
+        })
+      }, (i + 1) * 1000);
+    }
+    timeouts.current[6] = setTimeout(() => {
+      setBouns(windNumbers[6]);
+      setRedo(true);
+    }, 7000);
+  }
+
+  useEffect(() => {
+    runTimeouts();
+    return() => {
+      timeouts.current.forEach((v) => {
+        clearTimeout(v);
+      })
+    }
+  }, [timeouts.current]); // 두 번째 인자가 빈 배열이면 ComponentDidMount와 동일, 배열의 요소가 존재시 ComponentDidMout와 ComponentDidUpdate 동시 수행한다.
+
+  const onClickRedo = () => {
+    setWindNumbers(getWinNumbers());
+    setWinBalls([]);
+    setBouns(null);
+    setRedo(false);
+    timeouts.current = [];
+  }
+
+  return(
+    <>
+      <div>당첨 숫자</div>
+      <div id='결과창'>
+        {winBalls.map((v) => <Ball key={v} number={v} />)}
+      </div>
+      <div>보너스</div>
+      {bouns && <Ball number={bouns} />}
+      {redo && <button type='button' onClick={redo ? onClickRedo : () => {}}>한 번 더!</button>}
+    </>
+  );
+}
+
+
+export default LottoHooks;

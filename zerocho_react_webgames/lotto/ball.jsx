@@ -1,4 +1,4 @@
-import React, {PureComponent, Component} from 'react';
+import React, {PureComponent, Component, memo} from 'react';
 
 
 class Ball extends PureComponent{
