@@ -1,4 +1,4 @@
-import React, {Component, useState, useRef, useEffect} from 'react';
+import React, {Component, useState, useRef, useEffect, useMemo} from 'react';
 import Ball from './ball';
 
 function getWinNumbers() {
@@ -83,7 +83,8 @@ class Lotto extends Component{
 
 
 const LottoHooks = () => {
-  const [windNumbers, setWindNumbers] = useState(getWinNumbers());
+  const lottoNumbers = useMemo(() => getWinNumbers(), []); // useMemo는 두 번째 인자 배열 요소가 바뀌기 전까지는 기억한다. useMemo는 값을 기억하는 거고 useCallback은 함수를 기억한다. 자식 Component에 함수를 props로 보낼 경우 useCallback으로 보내야 된다.
+  const [windNumbers, setWindNumbers] = useState(lottoNumbers);
   const [winBalls, setWinBalls] = useState([]);
   const [bouns, setBouns] = useState(null);
   const [redo, setRedo] = useState(false);
