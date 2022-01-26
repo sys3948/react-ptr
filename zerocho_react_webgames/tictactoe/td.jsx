@@ -1,7 +1,7 @@
-import React, {useCallback} from "react";
-import {CLICK_CELL, CHANGE_TURN} from './tictacteo';
+import React, {useCallback, memo} from "react";
+import {CLICK_CELL} from './tictacteo';
 
-const Td = ({rowIndex, cellIndex, dispatch, cellData}) => {
+const Td = memo(({rowIndex, cellIndex, dispatch, cellData}) => {
    const onClickTd = useCallback(() => {
     console.log(rowIndex, cellIndex);
     if (cellData) {
@@ -12,7 +12,7 @@ const Td = ({rowIndex, cellIndex, dispatch, cellData}) => {
   return(
     <td onClick={onClickTd}>{cellData}</td>
   )
-}
+})
 
 
 export default Td;
