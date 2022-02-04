@@ -11,7 +11,7 @@ module.exports = {
   },
 
   entry : {
-    app : ['./clinet'],
+    app : ['./client'],
   },
 
   module : {
