@@ -6,21 +6,21 @@ module.exports = {
     "username": "cloudAdmin0103",
     "password": process.env.MYSQL_PASSWORD,
     "database": "sleact",
-    "host": "192.168.56.105",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "cloudAdmin0103",
     "password": process.env.MYSQL_PASSWORD,
     "database": "sleact",
-    "host": "192.168.56.105",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "production": {
     "username": "cloudAdmin0103",
     "password": process.env.MYSQL_PASSWORD,
     "database": "sleact",
-    "host": "192.168.56.105",
+    "host": "localhost",
     "dialect": "mysql"
   }
 }
