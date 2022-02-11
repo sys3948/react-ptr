@@ -2,7 +2,7 @@ import React from "react";
 
 const App = () => {
     return(
-        <div>좀 만 참아주세요 ㅠㅠㅠ</div>
+        <div>핫 리로딩 - 일반 리액트랑 다르게 타입 스크립트는 좀 힘드네요 ㅠㅜ</div>
     );
 };
 
