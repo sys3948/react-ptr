@@ -1,8 +1,15 @@
 import React from "react";
+import {Switch, Route, Redirect} from 'react-router-dom';
+import Login from '@pages/Login';
+import SignUp from '@pages/SignUP';
 
 const App = () => {
     return(
-        <div>핫 리로딩 - 일반 리액트랑 다르게 타입 스크립트는 좀 힘드네요 ㅠㅜ</div>
+      <Switch>
+        <Redirect exact path="/" to="/login" />
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={SignUp} />
+      </Switch>
     );
 };
 
