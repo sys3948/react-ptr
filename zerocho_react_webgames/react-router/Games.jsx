@@ -5,6 +5,7 @@ import LottoHooks from '../lotto/lotto';
 import NumberBaseball from '../numberbaseball/NumberBaseball';
 import TicTacTeo from '../tictactoe/tictacteo';
 import MineSearch from '../minesearch/minesearch'
+import GameMatcher from './GameMatcher';
 
 const Games = () => {
   return(
@@ -20,30 +21,34 @@ const Games = () => {
         {/* 공통적인 부분(layout) */}
         <ul>
           <li>
-            <Link to="/gugudan" >구구단</Link>
+            <Link to="/game/gugudan" >구구단</Link>
           </li>
           <li>
-            <Link to="/lotto" >로또번호 출력</Link>
+            <Link to="/game/lotto" >로또번호 출력</Link>
           </li>
           <li>
-            <Link to="/numberbaseball" >숫자 야구</Link>
+            <Link to="/game/numberbaseball" >숫자 야구</Link>
           </li>
           <li>
-            <Link to="/tictactoe" >틱택토</Link>
+            <Link to="/game/tictactoe" >틱택토</Link>
           </li>
           <li>
-            <Link to="/minesearch" >지뢰찾기</Link>
+            <Link to="/game/minesearch" >지뢰찾기</Link>
+          </li>
+          <li>
+            <Link to="/game/index" >게임매쳐</Link>
           </li>
         </ul>
       </div>
       <div>
         {/* 화면이 변경되는 부분 */}
         {/* react-router-dom의 Route는 가상의 URL(path)을 만들어서 각 URL에 해당되는 Component를 연결해준다. 그렇기에 React Route는 눈속임이다. */}
-        <Route path="/gugudan" component={GuGuDan} />
-        <Route path="/lotto" component={LottoHooks} />{/* Hooks로 load할 때 React package가 두 번 import하기 때문에 Error가 발생한다. 그렇기에 Hooks로 load가 아니라 class로 load해야한다. */}
-        <Route path="/numberbaseball" component={NumberBaseball} />
-        <Route path="/tictactoe" component={TicTacTeo} />
-        <Route path="/minesearch" component={MineSearch} />
+        {/* <Route path="/gugudan" component={GuGuDan} /> */}
+        {/* <Route path="/lotto" component={LottoHooks} />Hooks로 load할 때 React package가 두 번 import하기 때문에 Error가 발생한다. 그렇기에 Hooks로 load가 아니라 class로 load해야한다. */}
+        {/* <Route path="/numberbaseball" component={NumberBaseball} /> */}
+        {/* <Route path="/tictactoe" component={TicTacTeo} /> */}
+        {/* <Route path="/minesearch" component={MineSearch} /> */}
+        <Route path="/game/:name" component={GameMatcher} />
       </div>
     </BrowserRouter>
   )
