@@ -49,6 +49,22 @@ const Games = () => {
         {/* <Route path="/tictactoe" component={TicTacTeo} /> */}
         {/* <Route path="/minesearch" component={MineSearch} /> */}
         <Route path="/game/:name" component={GameMatcher} />
+        {/*
+          line 51에서 component 인자 값으로 GameMatcher가 Class가 아닌 Hooks였다면 넘기는 방법은 두 가지다.
+            1. 화살 함수로 return 하기.
+              ex) <Route path="/game/:name" component={() => <GameMatcher props="123" />} />
+            2. component 대신 render 사용하기.
+              ex) <Route path="/game/:name" render={(props) => <GameMatcher props={props.abc} />} />
+
+          위 Route가 복수개일 경우 path가 일치한다면 하나의 Route가 출력되는 것이 아닌 일치되는 Route들이 출력된다.
+          이러한 문제를 해결하기 위해 Switch가 존재한다.
+          Switch는 의미 그대로 스위치로서 전등을 키는 스위치와 동일한 개념으로 
+          첫 번째 하나의 Route가 일치하면 다른 Route들은 종료된다.
+
+          Switch가 되지 않을 경우 exact 속성이 있다.
+          exact 속성은 Switch와 다르게 첫 번째 하나의 Route가 맞는 것을 찾는게 아닌 
+          path가 100% 일치할 경우 실행하는 속성이다.
+         */}
       </div>
     </BrowserRouter>
   )
