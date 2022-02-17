@@ -1,15 +1,17 @@
 import React from "react";
-import {Switch, Route, Redirect} from 'react-router-dom';
-import Login from '@pages/Login';
-import SignUp from '@pages/SignUP';
+import loadable from '@loadable/component';
+import {Routes, Route, Navigate} from 'react-router-dom';
+
+const Login = loadable(() => import('@pages/Login'));
+const SignUp = loadable(() => import('@pages/SignUP'));
 
 const App = () => {
     return(
-      <Switch>
-        <Redirect exact path="/" to="/login" />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={SignUp} />
-      </Switch>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
     );
 };
 

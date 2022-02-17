@@ -11,6 +11,9 @@
   "author": "yun",
   "license": "MIT",
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@loadable/component": "^5.15.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
@@ -31,6 +34,7 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
+    "@types/loadable__component": "^5.13.4",
     "@types/node": "^17.0.17",
     "@types/react-router": "^5.1.18",
     "@types/react-router-dom": "^5.3.3",
