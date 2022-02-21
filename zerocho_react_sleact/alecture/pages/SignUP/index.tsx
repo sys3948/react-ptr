@@ -1,6 +1,66 @@
-import React  from "react";
+import React, { useState, useCallback }  from "react";
+
+import useInput from '@hooks/useinput';
+
+import { Success, Form, Error, Label, Input, LinkContainer, Button, Header } from './styles';
+import { Link, Navigate } from 'react-router-dom';
+import axios from "axios";
 
 const SignUP = () => {
+
+  const [email, onChangeEmail] = useInput('');
+  const [nickname, onChangeNickname] = useInput('');
+  const [password, setPassword] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
+  const [mismatchError, setMismatchError] = useState(false);
+  const [signUpError, setSignUpError] = useState('');
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
+
+  const onSubmit = useCallback((e) => {
+    e.preventDefault();
+    console.log(email, nickname, password, passwordCheck);
+
+    if(!mismatchError && nickname){
+      console.log('서버로 회원 가입하기!');
+      // 비동기 요청하기 전에 then, catch, finally에 해당되는 state를 초기화 하는게 좋다.
+      // loading 단계
+      setSignUpError('');
+      setSignUpSuccess(false);
+      axios.post('http://localhost:3095/api/users', {
+        email,
+        nickname,
+        password
+      }).then(
+        // 성공
+        (response) => {
+          console.log(response);
+          setSignUpSuccess(true);
+        }
+      ).catch(
+        // 실패
+        (error) => {
+          console.log(error.response);
+          setSignUpError(error.response.data);
+        }
+      ).finally(
+        // 공통적인 부분.
+        () => {}
+      );
+    }else{
+      console.log('비밀번호가 일치하지 않습니다!');
+    }
+  }, [email, nickname, password, passwordCheck]);
+
+  const onChangePassword = useCallback((e) => {
+    setPassword(e.target.value);
+    setMismatchError(e.target.value !== passwordCheck);
+  }, [passwordCheck]);
+
+  const onChangePasswordCheck = useCallback((e) => {
+    setPasswordCheck(e.target.value);
+    setMismatchError(e.target.value !== password);
+  }, [password]);
+
   return (
      <div id="container">
       <Header>Sleact</Header>
