@@ -3,7 +3,7 @@ import React, { useState, useCallback }  from "react";
 import useInput from '@hooks/useinput';
 
 import { Success, Form, Error, Label, Input, LinkContainer, Button, Header } from './styles';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from "axios";
 
 const SignUP = () => {
