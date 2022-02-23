@@ -1,13 +1,18 @@
 import useInput from '@hooks/useinput';
+import fetcher from '@utils/fetcher';
 import { Success, Form, Error, Label, Input, LinkContainer, Button, Header } from './styles';
+
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useSWR from 'swr';
 
 const Login = () => {
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [logInError, setLogInError] = useState(false);
+
+  const {data, error} = useSWR('http://localhost:3095/api/users', fetcher);
 
 
   const onSubmit = useCallback((e) => {
@@ -15,7 +20,8 @@ const Login = () => {
 
     axios.post(
                'http://localhost:3095/api/users/login', 
-               {email, password}
+               {email, password},
+               {withCredentials : true,},
               ).then(
                 () => {}
               ).catch(
