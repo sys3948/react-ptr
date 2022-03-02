@@ -4,15 +4,18 @@ import { Success, Form, Error, Label, Input, LinkContainer, Button, Header } fro
 
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
+import {Routes, Route, Navigate} from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import useSWR from 'swr';
+// import useSWRImmutable from 'swr/immutable';
 
 const Login = () => {
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [logInError, setLogInError] = useState(false);
 
-  const {data, error} = useSWR('http://localhost:3095/api/users', fetcher);
+  // const {data, error} = useSWRImmutable('http://localhost:3095/api/users', fetcher);
+  const {data, error, mutate} = useSWR('http://localhost:3095/api/users', fetcher);
 
 
   const onSubmit = useCallback((e) => {
@@ -23,13 +26,22 @@ const Login = () => {
                {email, password},
                {withCredentials : true,},
               ).then(
-                () => {}
+                () => {
+                  mutate();
+                }
               ).catch(
                 (error) => {
                   setLogInError(error.response?.data?.statusCode === 401);
                 }
               );
   }, [email, password]);
+
+  console.log(data);
+
+  if(data){
+    console.log(data);
+    return <Route path="/login" element={<Navigate to="/workspace/channel" />} />
+  }
 
   return (
     <div id="container">
