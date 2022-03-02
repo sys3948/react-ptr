@@ -10,12 +10,13 @@ import useSWR from 'swr';
 // import useSWRImmutable from 'swr/immutable';
 
 const Login = () => {
+  const {data, error, mutate} = useSWR('http://localhost:3095/api/users', fetcher);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [logInError, setLogInError] = useState(false);
 
   // const {data, error} = useSWRImmutable('http://localhost:3095/api/users', fetcher);
-  const {data, error, mutate} = useSWR('http://localhost:3095/api/users', fetcher);
+  console.log(data);
 
 
   const onSubmit = useCallback((e) => {
@@ -26,8 +27,8 @@ const Login = () => {
                {email, password},
                {withCredentials : true,},
               ).then(
-                () => {
-                  mutate();
+                (response) => {
+                  mutate(response.data);
                 }
               ).catch(
                 (error) => {
@@ -36,11 +37,13 @@ const Login = () => {
               );
   }, [email, password]);
 
-  console.log(data);
-
   if(data){
     console.log(data);
-    return <Route path="/login" element={<Navigate to="/workspace/channel" />} />
+    return (
+      <Routes>
+        <Route path="*" element={<Navigate to="/workspace/channel" />} />
+      </Routes>
+    )
   }
 
   return (
