@@ -3,7 +3,6 @@ import axios from 'axios';
 
 import React, {FC, useCallback} from "react";
 import useSWR from 'swr';
-import useSWRImmutable from 'swr/immutable';
 import {Routes, Route, Navigate} from 'react-router-dom';
 
 const Workspace:FC = ({children}) => {
@@ -13,7 +12,7 @@ const Workspace:FC = ({children}) => {
     axios.post('http://localhost:3095/api/users/logout', null, {
       withCredentials : true,
     }).then((response) => {
-        mutate(response.data);
+        mutate(false, false);
     });
   }, []);
 

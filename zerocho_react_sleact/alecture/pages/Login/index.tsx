@@ -28,7 +28,7 @@ const Login = () => {
                {withCredentials : true,},
               ).then(
                 (response) => {
-                  mutate(response.data);
+                  mutate(response.data, false);
                 }
               ).catch(
                 (error) => {
@@ -37,8 +37,13 @@ const Login = () => {
               );
   }, [email, password]);
 
+  if(data === undefined){
+    return (
+      <div>로딩중...</div>
+    );
+  }
+
   if(data){
-    console.log(data);
     return (
       <Routes>
         <Route path="*" element={<Navigate to="/workspace/channel" />} />
