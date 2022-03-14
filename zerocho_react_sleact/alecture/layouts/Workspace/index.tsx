@@ -5,10 +5,15 @@ import axios from 'axios';
 
 import React, {FC, useCallback} from "react";
 import useSWR from 'swr';
-import {Routes, Route, Navigate} from 'react-router-dom';
+import {Routes, Route, Navigate, useParams} from 'react-router-dom';
 import gravatar from 'gravatar';
 
-const Workspace:FC = ({children}) => {
+import loadable from '@loadable/component';
+
+const Channel = loadable(() => import('@pages/Channel'));
+const DirectMessage = loadable(() => import('@pages/DirectMessage'));
+
+const Workspace:FC = () => {
   const {data, error, mutate} = useSWR('http://localhost:3095/api/users', fetcher);
 
   const onLogout = useCallback(() => {
@@ -27,6 +32,8 @@ const Workspace:FC = ({children}) => {
     )
   }
 
+  console.log(useParams());
+
   return(
     <div>
       <Header>
@@ -43,9 +50,14 @@ const Workspace:FC = ({children}) => {
           <WorkspaceName>Sleact</WorkspaceName>
           <MenuScroll>Menu Scroll</MenuScroll>
         </Channels>
-        <Chats>Chats</Chats>
+        <Chats>
+          <Routes>
+            <Route path="/channel/:channel" element={<Channel />} />
+            <Route path="/dm/:id" element={<DirectMessage />} />
+          </Routes>
+        </Chats>
+      {/* {children} */}
       </WorkspaceWrapper>
-      {children}
     </div>
   );
 }
