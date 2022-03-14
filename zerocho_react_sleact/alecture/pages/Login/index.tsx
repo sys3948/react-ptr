@@ -10,7 +10,7 @@ import useSWR from 'swr';
 // import useSWRImmutable from 'swr/immutable';
 
 const Login = () => {
-  const {data, error, mutate} = useSWR('http://localhost:3095/api/users', fetcher);
+  const {data, error, mutate} = useSWR('http://localhost:3095/api/users', fetcher, {dedupingInterval : 10000});
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [logInError, setLogInError] = useState(false);

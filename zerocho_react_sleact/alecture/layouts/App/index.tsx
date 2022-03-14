@@ -1,7 +1,7 @@
 import React from "react";
 import loadable from '@loadable/component';
 import {Routes, Route, Navigate} from 'react-router-dom';
-import Workspace from "./Workspace";
+import Workspace from "@layouts/Workspace";
 
 const Login = loadable(() => import('@pages/Login'));
 const SignUp = loadable(() => import('@pages/SignUP'));
