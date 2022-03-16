@@ -5,9 +5,9 @@ import {Routes, Route, Navigate} from 'react-router-dom';
 
 const Login = loadable(() => import('@pages/Login'));
 const SignUp = loadable(() => import('@pages/SignUP'));
-// const Channel = loadable(() => import('@pages/Channel'));
-// const DirectMessage = loadable(() => import('@pages/DirectMessage'));
-const Workspace = loadable(() => import('@layouts/Workspace'));
+const Channel = loadable(() => import('@pages/Channel'));
+const DirectMessage = loadable(() => import('@pages/DirectMessage'));
+// const Workspace = loadable(() => import('@layouts/Workspace'));
 
 const App = () => {
     return(
@@ -15,9 +15,9 @@ const App = () => {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/workspace/:workspace/*" element={<Workspace />} />
-        {/* <Route path="/workspace/channel" element={<Channel />} />
-        <Route path="/workspace/dm" element={<DirectMessage />} /> */}
+        {/* <Route path="/workspace/:workspace" element={<Workspace />} /> */}
+        <Route path="/workspace/channel" element={<Channel />} />
+        <Route path="/workspace/dm" element={<DirectMessage />} />
       </Routes>
     );
 };

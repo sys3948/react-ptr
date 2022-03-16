@@ -5,10 +5,11 @@ import React from "react";
 const Channel = () => {
   console.log('채널로 들어왔어요!');
   return (
-    <div>안녕하세요 채널입니다!</div>
-    // <Container>
-    //   <Header>채널!</Header>
-    // </Container>
+    <Workspace>
+      <Container>
+        <Header>채널!</Header>
+      </Container>
+    </Workspace>
   );
 }
 

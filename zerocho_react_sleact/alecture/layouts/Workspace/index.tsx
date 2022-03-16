@@ -13,7 +13,7 @@ import loadable from '@loadable/component';
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
-const Workspace:FC = () => {
+const Workspace:FC = ({children}) => {
   const {data, error, mutate} = useSWR('http://localhost:3095/api/users', fetcher);
 
   const onLogout = useCallback(() => {
@@ -32,7 +32,7 @@ const Workspace:FC = () => {
     )
   }
 
-  console.log(useParams());
+  console.log('Workspace 입니다.')
 
   return(
     <div>
@@ -51,12 +51,12 @@ const Workspace:FC = () => {
           <MenuScroll>Menu Scroll</MenuScroll>
         </Channels>
         <Chats>
-          <Routes>
-            <Route path="/channel/:channel" element={<Channel />} />
+          {/* <Routes>
+            <Route path="/channel" element={<Channel />} />
             <Route path="/dm/:id" element={<DirectMessage />} />
-          </Routes>
+          </Routes> */}
+          {children}
         </Chats>
-      {/* {children} */}
       </WorkspaceWrapper>
     </div>
   );

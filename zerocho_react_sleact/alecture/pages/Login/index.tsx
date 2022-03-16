@@ -16,7 +16,6 @@ const Login = () => {
   const [logInError, setLogInError] = useState(false);
 
   // const {data, error} = useSWRImmutable('http://localhost:3095/api/users', fetcher);
-  console.log(data);
 
 
   const onSubmit = useCallback((e) => {
