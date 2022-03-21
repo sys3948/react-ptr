@@ -1,4 +1,4 @@
-import { Header, RightMenu, ProfileImg, WorkspaceWrapper, Workspaces, Channels, Chats, WorkspaceName, MenuScroll, ProfileModal, LogOutButton, WorkspaceButton, AddButton } from '@layouts/Workspace/styles';
+import { Header, RightMenu, ProfileImg, WorkspaceWrapper, Workspaces, Channels, Chats, WorkspaceName, MenuScroll, ProfileModal, LogOutButton, WorkspaceButton, AddButton, } from '@layouts/Workspace/styles';
 
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
@@ -11,9 +11,11 @@ import gravatar from 'gravatar';
 
 import loadable from '@loadable/component';
 import Menu from '@components/Menu';
+import Modal from '@components/Modal';
 import { Link } from 'react-router-dom';
-import { Button, Label } from '@pages/Login/styles';
+import { Button, Input, Label } from '@pages/Login/styles';
 import useInput from '@hooks/useinput';
+import { toast } from 'react-toastify';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -21,9 +23,9 @@ const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 const Workspace:FC = ({children}) => {
   const {data, error, mutate} = useSWR<IUser | false>('http://localhost:3095/api/users', fetcher);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [ShowCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
-  const [newWorkspace, setNewWorkSpace] = useInput('');
-  const [newUrl, setNewUrl] = useInput('');
+  const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
+  const [newWorkspace, onChangeNewWorkspace, setNewWorkSpace] = useInput('');
+  const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
 
   const onLogout = useCallback(() => {
     axios.post('http://localhost:3095/api/users/logout', null, {
@@ -33,14 +35,44 @@ const Workspace:FC = ({children}) => {
     });
   }, []);
 
-  const onClickCreateWorkspace = useCallback(() => {
+  const onClickCreateWorkspace = useCallback((e) => {
+    e.stopPropagation();
     setShowCreateWorkspaceModal((prev) => !prev);
   }, []);
 
-  const onClickUserProfile = useCallback(() => {
+  const onClickUserProfile = useCallback((e) => {
     // 토글 함수.
+    e.stopPropagation();
     setShowUserMenu((prev) => !prev);
   }, []);
+
+  const onCloseModal = useCallback(() => {
+    setShowCreateWorkspaceModal(false);
+  }, []);
+
+  const onCreateWorkspace = useCallback((e) => {
+    e.preventDefault();
+    console.log(newWorkspace);
+    console.log(newUrl);
+    if (!newWorkspace || !newWorkspace.trim()) return;
+    if (!newUrl || !newUrl.trim()) return;
+    axios.post('http://localhost:3095/api/workspaces', {
+      workspace : newWorkspace,
+      url : newUrl,
+    },{
+      withCredentials : true,
+    }
+    ).then((response) => {
+      console.log(response);
+      mutate();
+      setShowCreateWorkspaceModal(false);
+      setNewWorkSpace('');
+      setNewUrl('');
+    }).catch((error) => {
+      console.dir(error);
+      toast.error(error.response?.data, { position : 'bottom-center' });
+    });
+  }, [newWorkspace, newUrl]);
 
   if(!data){
     return (
@@ -95,11 +127,11 @@ const Workspace:FC = ({children}) => {
         <form onSubmit={onCreateWorkspace}>
           <Label id="workspace-label">
             <span>워크스페이스 이름</span>
-            <Input id="workdpace" value={newWorkspace} onChange={onChangeNewWorkspace} />
+            <Input id="workspace" value={newWorkspace} onChange={onChangeNewWorkspace} />
           </Label>
-          <Label id="workspace-label">
+          <Label id="workspace-url-label">
             <span>워크스페이스 URL</span>
-            <Input id="workdpace" value={newUrl} onChange={onChangeNewUrl} />
+            <Input id="workspace" value={newUrl} onChange={onChangeNewUrl} />
           </Label>
           <Button type='submit'>생성하기</Button>
         </form>
