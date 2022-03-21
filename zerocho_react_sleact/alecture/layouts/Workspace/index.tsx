@@ -1,7 +1,8 @@
-import { Header, RightMenu, ProfileImg, WorkspaceWrapper, Workspaces, Channels, Chats, WorkspaceName, MenuScroll, ProfileModal, LogOutButton } from '@layouts/Workspace/styles';
+import { Header, RightMenu, ProfileImg, WorkspaceWrapper, Workspaces, Channels, Chats, WorkspaceName, MenuScroll, ProfileModal, LogOutButton, WorkspaceButton, AddButton } from '@layouts/Workspace/styles';
 
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
+import {IUser} from '@typings/db';
 
 import React, {FC, useCallback, useState} from "react";
 import useSWR from 'swr';
@@ -10,13 +11,19 @@ import gravatar from 'gravatar';
 
 import loadable from '@loadable/component';
 import Menu from '@components/Menu';
+import { Link } from 'react-router-dom';
+import { Button, Label } from '@pages/Login/styles';
+import useInput from '@hooks/useinput';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 const Workspace:FC = ({children}) => {
-  const {data, error, mutate} = useSWR('http://localhost:3095/api/users', fetcher);
+  const {data, error, mutate} = useSWR<IUser | false>('http://localhost:3095/api/users', fetcher);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [ShowCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
+  const [newWorkspace, setNewWorkSpace] = useInput('');
+  const [newUrl, setNewUrl] = useInput('');
 
   const onLogout = useCallback(() => {
     axios.post('http://localhost:3095/api/users/logout', null, {
@@ -24,6 +31,10 @@ const Workspace:FC = ({children}) => {
     }).then((response) => {
         mutate(false, false);
     });
+  }, []);
+
+  const onClickCreateWorkspace = useCallback(() => {
+    setShowCreateWorkspaceModal((prev) => !prev);
   }, []);
 
   const onClickUserProfile = useCallback(() => {
@@ -38,9 +49,6 @@ const Workspace:FC = ({children}) => {
       </Routes>
     )
   }
-
-  console.log('Workspace 입니다.');
-  console.log(data);
 
   return(
     <div>
@@ -62,7 +70,15 @@ const Workspace:FC = ({children}) => {
         </RightMenu>
       </Header>
       <WorkspaceWrapper>
-        <Workspaces></Workspaces>
+        <Workspaces>{data.Workspaces.map((ws) => {
+          return (
+            <Link key={ws.id} to={`/workspace/${123}/channel/일반`}>
+              <WorkspaceButton>{ws.name.slice(0, 1).toUpperCase()}</WorkspaceButton>
+            </Link>
+          );
+        })}
+          <AddButton onClick={onClickCreateWorkspace}>+</AddButton>
+        </Workspaces>
         <Channels>
           <WorkspaceName>Sleact</WorkspaceName>
           <MenuScroll>Menu Scroll</MenuScroll>
@@ -75,6 +91,19 @@ const Workspace:FC = ({children}) => {
           {children}
         </Chats>
       </WorkspaceWrapper>
+      <Modal show={showCreateWorkspaceModal} onCloseModal={onCloseModal}>
+        <form onSubmit={onCreateWorkspace}>
+          <Label id="workspace-label">
+            <span>워크스페이스 이름</span>
+            <Input id="workdpace" value={newWorkspace} onChange={onChangeNewWorkspace} />
+          </Label>
+          <Label id="workspace-label">
+            <span>워크스페이스 URL</span>
+            <Input id="workdpace" value={newUrl} onChange={onChangeNewUrl} />
+          </Label>
+          <Button type='submit'>생성하기</Button>
+        </form>
+      </Modal>
     </div>
   );
 }
