@@ -2,7 +2,7 @@ import { Header, RightMenu, ProfileImg, WorkspaceWrapper, Workspaces, Channels, 
 
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import {IUser} from '@typings/db';
+import {IChannel, IUser} from '@typings/db';
 
 import React, {FC, useCallback, useState} from "react";
 import useSWR from 'swr';
@@ -22,13 +22,22 @@ const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 const Workspace:FC = ({children}) => {
-  const {data, error, mutate} = useSWR<IUser | false>('http://localhost:3095/api/users', fetcher);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
   const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [newWorkspace, onChangeNewWorkspace, setNewWorkSpace] = useInput('');
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
+
+  const { workspace } = useParams< {workspace : string} >();
+
+  const {data : userData, error, mutate} = useSWR<IUser | false>('http://localhost:3095/api/users', fetcher);
+  const {data:channelData} = useSWR<IChannel[]>(
+    userData? `http://localhost:3095/api/workspaces/${workspace}/channels` : null,
+    fetcher,
+  );
+
+  console.log('채널 데이터는' + channelData);
 
   const onLogout = useCallback(() => {
     axios.post('http://localhost:3095/api/users/logout', null, {
@@ -85,7 +94,7 @@ const Workspace:FC = ({children}) => {
   }, []);
 
 
-  if(!data){
+  if(!userData){
     return (
       <Routes>
         <Route path="*" element={<Navigate to="/login" />} />
@@ -98,12 +107,12 @@ const Workspace:FC = ({children}) => {
       <Header>
         <RightMenu>
           <span onClick={onClickUserProfile}>
-            <ProfileImg src={gravatar.url(data.email, {s : '28px', d : 'retro'})} alt={data.nickname}></ProfileImg>
+            <ProfileImg src={gravatar.url(userData.email, {s : '28px', d : 'retro'})} alt={userData.nickname}></ProfileImg>
             { showUserMenu && (<Menu style={{ right:0, top:38 }} show={showUserMenu} onCloseModal={onClickUserProfile}>
               <ProfileModal>
-                <img src={gravatar.url(data.email, {s : '36px', d : 'retro'})} alt={data.nickname} />
+                <img src={gravatar.url(userData.email, {s : '36px', d : 'retro'})} alt={userData.nickname} />
                 <div>
-                  <span id='profile-name'>{data.nickname}</span>
+                  <span id='profile-name'>{userData.nickname}</span>
                   <span id='profile-active'>Active</span>
                 </div>
               </ProfileModal>
@@ -114,7 +123,7 @@ const Workspace:FC = ({children}) => {
       </Header>
       <WorkspaceWrapper>
         <Workspaces>
-          {data?.Workspaces?.map((ws) => {
+          {userData?.Workspaces?.map((ws) => {
           return (
             <Link key={ws.id} to={`/workspace/${123}/channel/일반`}>
               <WorkspaceButton>{ws.name.slice(0, 1).toUpperCase()}</WorkspaceButton>
@@ -131,6 +140,11 @@ const Workspace:FC = ({children}) => {
                 <button onClick={onClickAddChannel}>채널 만들기</button>
               </WorkspaceModal>
             </Menu>
+            {channelData?.map((v) => {
+              return(
+                <div key={v.id}>{v.name}</div>
+              )
+            })}
           </MenuScroll>
         </Channels>
         <Chats>
@@ -154,7 +168,7 @@ const Workspace:FC = ({children}) => {
           <Button type='submit'>생성하기</Button>
         </form>
       </Modal>
-      <CreateChannelModal show={showCreateChannelModal} onCloseModal={onCloseModal} />
+      <CreateChannelModal show={showCreateChannelModal} onCloseModal={onCloseModal} setShowCreateChannelModal={setShowCreateChannelModal} />
     </div>
   );
 }

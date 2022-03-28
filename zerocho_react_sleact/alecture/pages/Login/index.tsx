@@ -45,7 +45,7 @@ const Login = () => {
   if(data){
     return (
       <Routes>
-        <Route path="*" element={<Navigate to="/workspace/channel" />} />
+        <Route path="*" element={<Navigate to="/workspace/sleact/channel/일반" />} />
       </Routes>
     )
   }
