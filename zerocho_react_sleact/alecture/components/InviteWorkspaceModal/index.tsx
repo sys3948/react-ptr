@@ -59,3 +59,5 @@ const InviteWorkspaceModal : FC<Props> = ({ show, onCloseModal, setShowInviteWor
     </Modal>
   );
 }
+
+export default InviteWorkspaceModal;

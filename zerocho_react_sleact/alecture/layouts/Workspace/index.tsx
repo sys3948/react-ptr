@@ -18,6 +18,9 @@ import useInput from '@hooks/useinput';
 import { toast } from 'react-toastify';
 import CreateChannelModal from '@components/CreateChannelModal';
 import InviteChannelModal from '@components/InviteChannelModal';
+import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
+import DMList from '@components/DMList';
+import ChannelList from '@components/ChannelList';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -39,6 +42,7 @@ const Workspace:FC = ({children}) => {
     userData? `http://localhost:3095/api/workspaces/${workspace}/channels` : null,
     fetcher,
   );
+  const { data : memberData } = useSWR<IUser[]>(userData ? `http://localhost:3095/api/workspaces/${workspace}/members` : null, fetcher);
 
   const onLogout = useCallback(() => {
     axios.post('http://localhost:3095/api/users/logout', null, {
@@ -148,7 +152,9 @@ const Workspace:FC = ({children}) => {
                 <button onClick={onClickAddChannel}>채널 만들기</button>
               </WorkspaceModal>
             </Menu>
-            {channelData?.map(v => <div key={v.id}>{v.name}</div>)}
+            <ChannelList />
+            <DMList />
+            {/* {channelData?.map(v => <div key={v.id}>{v.name}</div>)} */}
           </MenuScroll>
         </Channels>
         <Chats>
@@ -174,6 +180,7 @@ const Workspace:FC = ({children}) => {
       </Modal>
       <CreateChannelModal show={showCreateChannelModal} onCloseModal={onCloseModal} setShowCreateChannelModal={setShowCreateChannelModal} />
       <InviteChannelModal show={showInviteChannelModal} onCloseModal={onCloseModal} setShowInviteChannelModal={setShowInviteChannelModal} />
+      <InviteWorkspaceModal show={showInviteWorkspaceModal} onCloseModal={onCloseModal} setShowInviteWorkspaceModal={setShowInviteWorkspaceModal} />
     </div>
   );
 }
