@@ -61,7 +61,7 @@ const DMList : FC = () => {
             const isOnline = onlineList.includes(member.id);
             const count = countList[member.id] || 0;
             return (
-            <NavLink key={member.id} className="selected" to={`/workspace/${workspace}/dm/${member.id}`} onClick={resetCount(member.id)}>
+            <NavLink key={member.id} className={member.id === userData?.id ?"selected" : ""} to={`/workspace/${workspace}/dm/${member.id}`} onClick={resetCount(member.id)}>
               <i
                 className={`c-icon p-channel_sidebar__presence_icon p-channel_sidebar__presence_icon--dim_enabled c-presence ${
                   isOnline ? 'c-presence--active c-icon--presence-online' : 'c-icon--presence-offline'

@@ -37,6 +37,7 @@ const ChannelList: FC = () => {
 
   useEffect(() => {
     console.log('ChannelList: workspace 바꼈다', workspace, location.pathname);
+    console.log('ChannelList: ', decodeURI(decodeURIComponent(location.pathname.split('/')[location.pathname.split('/').length - 1])));
     setCountList({});
   }, [workspace, location]);
 
@@ -87,7 +88,7 @@ const ChannelList: FC = () => {
             return (
               <NavLink
                 key={channel.name}
-                className="selected"
+                className={channel.name === decodeURI(decodeURIComponent(location.pathname.split('/')[location.pathname.split('/').length - 1])) ? "selected" : ""}
                 to={`/workspace/${workspace}/channel/${channel.name}`}
                 onClick={resetCount(`c-${channel.id}`)}
               >

@@ -37,13 +37,11 @@ const SignUP = () => {
       }).then(
         // 성공
         (response) => {
-          console.log(response);
           setSignUpSuccess(true);
         }
       ).catch(
         // 실패
         (error) => {
-          console.log(error.response);
           setSignUpError(error.response.data);
         }
       ).finally(
@@ -74,7 +72,7 @@ const SignUP = () => {
   if(data){
     return (
       <Routes>
-        <Route path="*" element={<Navigate to="/workspace/channel" />} />
+        <Route path="*" element={<Navigate to="/workspace/sleact/channel/일반" />} />
       </Routes>
     )
   }
