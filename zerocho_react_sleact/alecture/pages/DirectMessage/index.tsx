@@ -9,6 +9,7 @@ import {Container, Header} from "@pages/DirectMessage/styles";
 import ChatBox from "@components/ChatBox";
 import ChatList from "@components/ChatList";
 import useInput from "@hooks/useinput";
+import axios from "axios";
 
 const DirectMessage = () => {
   const {workspace, dm} = useParams<{workspace:string; dm:string}>();
@@ -16,13 +17,23 @@ const DirectMessage = () => {
   const {data: myData} = useSWR('http://localhost:3095/api/users', fetcher);
 
   const [chat, onChangeChat, setChat] = useInput('');
+  const {data : chatData, mutate : mutateChat} = useSWR(`http://localhost:3095/api/workspaces/${workspace}/dms/${dm}/chats?perPage=20&page=1`, fetcher);
+
 
   const onSubmitForm = useCallback((e) => {
     e.preventDefault();
     console.log('submit!');
     console.log('e의 내용은 : ', e);
+    if(chat?.trim()){
+      axios.post(`http://localhost:3095/api/workspaces/${workspace}/dms/${dm}/chats`, 
+      {content : chat}).then(
+        () => {
+          mutateChat();
+        }
+      ).catch(console.error);
+    }
     setChat('');
-  }, []);
+  }, [chat]);
 
   return (
     <Workspace>
