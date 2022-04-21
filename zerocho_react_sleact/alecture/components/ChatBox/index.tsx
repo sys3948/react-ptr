@@ -1,16 +1,36 @@
-import React, { VFC } from "react";
+import React, { useCallback, useEffect, useRef, VFC } from "react";
 
 import {ChatArea, Form, SendButton, Toolbox, MentionsTextarea} from '@components/ChatBox/styles';
+import autosize from "autosize";
 
 interface Props {
   chat: string;
+  onSubmitForm : (e : any) => void;
+  onChangeChat : (e : any) => void;
+  placeholder ?: string;
 }
 
-const ChatBox:VFC<Props> = ({chat}) => {
+const ChatBox:VFC<Props> = ({chat, onSubmitForm, onChangeChat, placeholder}) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if(textareaRef.current){
+      autosize(textareaRef.current);
+    }
+  }, []);
+
+  const onKeydownChat = useCallback((e) => {
+    console.log('onKeydownChat Hooks의 e 값 : ', e);
+    if(e.key === 'Enter'){
+      if(!e.shiftKey){
+        onSubmitForm(e);
+      }
+    }
+  }, []);
+
   return (
     <ChatArea>
-      <Form>
-        <MentionsTextarea/>
+      <Form onSubmit={onSubmitForm}>
+        <MentionsTextarea id="editor-chat" value={chat} onChange={onChangeChat} onKeyPress={onKeydownChat} ref={textareaRef} placeholder={placeholder} />
         <Toolbox>
           <SendButton className={
               'c-button-unstyled c-icon_button c-icon_button--light c-icon_button--size_medium c-texty_input__button c-texty_input__button--send' +

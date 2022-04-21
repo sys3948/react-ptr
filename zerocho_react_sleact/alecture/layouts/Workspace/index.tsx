@@ -113,8 +113,6 @@ const Workspace:FC = ({children}) => {
     )
   }
 
-  console.log(userData);
-
   return(
     <div>
       <Header>
