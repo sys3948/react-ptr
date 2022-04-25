@@ -3,6 +3,7 @@ import React, { FC, useState, useCallback, useEffect } from "react";
 import { CollapseButton } from '@components/DMList/styles';
 import { IUser, IUserWithOnline, IDM } from '@typings/db';
 import fetcher from '@utils/fetcher';
+import useSocket from "@hooks/useSocket";
 
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
@@ -12,6 +13,7 @@ const DMList : FC = () => {
   const { workspace } = useParams<{ workspace? : string }>();
   const { data : userData, error, mutate } = useSWR<IUser>('http://localhost:3095/api/users', fetcher);
   const { data : memberData } = useSWR<IUserWithOnline[]>(userData ? `http://localhost:3095/api/workspaces/${workspace}/members` : null, fetcher);
+  const [socket] = useSocket(workspace);
 
   const [channelCollapse, setChannelCollapse] = useState(false);
   const [countList, setCountList] = useState<{[key : string] : number}>({});
@@ -45,6 +47,16 @@ const DMList : FC = () => {
     setOnlineList([]);
     setCountList({});
   }, [workspace]);
+
+  useEffect(() => {
+    socket?.on('onlineList', (data:number[]) => {
+      setOnlineList(data);
+    });
+
+    return () => {
+      socket?.off('onlineList');
+    }
+  }, [socket]);
   
   return(
     <>
