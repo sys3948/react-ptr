@@ -26,7 +26,9 @@ const DirectMessage = () => {
     console.log('e의 내용은 : ', e);
     if(chat?.trim()){
       axios.post(`http://localhost:3095/api/workspaces/${workspace}/dms/${dm}/chats`, 
-      {content : chat}).then(
+      {content : chat},
+      {withCredentials : true},
+      ).then(
         () => {
           mutateChat();
         }
