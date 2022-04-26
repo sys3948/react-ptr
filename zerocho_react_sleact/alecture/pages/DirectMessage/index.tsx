@@ -10,6 +10,7 @@ import ChatBox from "@components/ChatBox";
 import ChatList from "@components/ChatList";
 import useInput from "@hooks/useinput";
 import axios from "axios";
+import makeSection from "@utils/makeSection";
 
 const DirectMessage = () => {
   const {workspace, dm} = useParams<{workspace:string; dm:string}>();
@@ -37,6 +38,12 @@ const DirectMessage = () => {
     setChat('');
   }, [chat]);
 
+  if(!userData || !myData){
+    return null;
+  }
+
+  const chatSections = makeSection(chatData ? [...chatData].reverse() : []);
+
   return (
     <Workspace>
       <Container>
@@ -44,7 +51,7 @@ const DirectMessage = () => {
           <img src={userData ? gravatar.url(userData.email, {s: '24px', d: 'retro'}) : ""} alt={userData ? userData.nickname : ""} />
           <span>{userData ? userData.nickname : "존재하지 않는 사용자입니다."}</span>
         </Header>
-        <ChatList chatData={chatData} />
+        <ChatList chatSections={chatSections} />
         <ChatBox chat={chat} onChangeChat={onChangeChat} onSubmitForm={onSubmitForm} />
       </Container>
     </Workspace>
