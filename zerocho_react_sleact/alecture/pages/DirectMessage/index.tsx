@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import gravatar from 'gravatar';
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
@@ -14,6 +14,7 @@ import axios from "axios";
 import makeSection from "@utils/makeSection";
 import { IDM } from "@typings/db";
 import Scrollbars from "react-custom-scrollbars";
+import useSocket from "@hooks/useSocket";
 
 const DirectMessage = () => {
   const {workspace, dm} = useParams<{workspace:string; dm:string}>();
@@ -26,6 +27,8 @@ const DirectMessage = () => {
   const isEmpty = chatData?.[0]?.length === 0;
   const isReachingEnd = isEmpty || (chatData && chatData[chatData.length - 1]?.length < 20) || false;
   const scrollbarRef = useRef<Scrollbars>(null);
+
+  const [socket] = useSocket(workspace);
 
 
   const onSubmitForm = useCallback((e) => {
@@ -60,6 +63,35 @@ const DirectMessage = () => {
       ).catch(console.error);
     }
   }, [chat]);
+
+  const onMessage = useCallback((data : IDM) => {
+    console.log('onMessage의 myData는 ', myData);
+    if(data.SenderId === Number(dm) && myData.id !== Number(dm)){
+      mutateChat((chatData) => {
+        chatData?.[0].unshift(data);
+        return chatData;
+      }, false).then(() => {
+        if(scrollbarRef.current){
+          if(scrollbarRef.current.getScrollHeight() < scrollbarRef.current.getClientHeight() + scrollbarRef.current.getScrollTop() + 150){
+            scrollbarRef.current?.scrollToBottom();
+          }
+        }
+      })
+    }
+  }, []);
+
+  useEffect(() => {
+    socket?.on('dm', onMessage);
+    return () => {
+      socket?.off('dm', onMessage);
+    }
+  }, [socket, onMessage]);
+
+  useEffect(() => {
+    if(chatData?.length === 1){
+      scrollbarRef.current?.scrollToBottom();
+    }
+  }, [chatData]);
 
   if(!userData || !myData){
     return null;
