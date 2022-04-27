@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useRef, VFC } from "react";
+import React, { forwardRef, MutableRefObject, useCallback, useRef, VFC } from "react";
 
 import {ChatZone, Section, StickyHeader} from "@components/ChatList/styles";
 import { IDM } from "@typings/db";
@@ -19,10 +19,13 @@ const ChatList = forwardRef<Scrollbars, Props>(({chatSections, setSize, isEmpty,
     if(values.scrollTop === 0 && !isReachingEnd){
       console.log('가장 위');
       setSize((prevSize) => prevSize + 1).then(() => {
-        // 스크롤 위치 유지
+        const current = (ref as MutableRefObject<Scrollbars>)?.current;
+        if(current){
+          current.scrollTop(current.getScrollHeight() - values.scrollHeight);
+        }
       });
     }
-  }, []);
+  }, [ref, isReachingEnd, setSize]);
 
   return (
     <ChatZone>

@@ -32,7 +32,24 @@ const DirectMessage = () => {
     e.preventDefault();
     console.log('submit!');
     console.log('e의 내용은 : ', e);
-    if(chat?.trim()){
+    if(chat?.trim() && chatData){
+      mutateChat((prevChatData) => {
+        prevChatData?.[0].unshift({
+          id : (chatData[0][0]?.id || 0) + 1,
+          content : chat,
+          SenderId : myData.id,
+          Sender : myData,
+          ReceiverId : userData.id,
+          Receiver : userData,
+          createdAt : new Date(),
+        });
+
+        return prevChatData;
+      }).then(() => {
+        setChat('');
+        scrollbarRef.current?.scrollToBottom();
+      });
+
       axios.post(`http://localhost:3095/api/workspaces/${workspace}/dms/${dm}/chats`, 
       {content : chat},
       {withCredentials : true},
@@ -42,7 +59,6 @@ const DirectMessage = () => {
         }
       ).catch(console.error);
     }
-    setChat('');
   }, [chat]);
 
   if(!userData || !myData){
